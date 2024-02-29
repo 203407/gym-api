@@ -11,8 +11,20 @@ export class UserController{
 
         const idUser = crypto.randomUUID()        
         const status =  await this.userModel.createUser(idUser,name, email,password)
+                
+        if(typeof status === 'object' ){
+            res.status(400).json(status.message)                       
+        }else{            
+            res.status(200).json("creado correctamente")
+        }       
+
         
-        res.json(status)        
+        
+        // if (status) res.status(200).json(status) 
+
+
+        
+        // res.status(400).json("Problemas al crear el usuario")
     }
 
     login = async (req,res) => {
@@ -23,13 +35,13 @@ export class UserController{
             
             const token = generateToken(check)
 
-            res.json(token)            
-
+            const userInfo = {  
+                ...check, token:token
+            }
+            res.status(200).json(userInfo)                  
         }else{            
-            res.json(check)
-        }
-
-        
+            res.status(400).json(check)
+        }        
     }
 
 }

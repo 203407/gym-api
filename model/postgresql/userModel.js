@@ -5,21 +5,37 @@ export class UserModel{
 
     static async createUser(id,name, email,password){
 
-        const sql =
-        "INSERT INTO users (id,name,password,email) VALUES ($1, $2, $3, $4) RETURNING *";
         
-        const newPassword = await this.hashPassword(password)
-        const values = [id,name,newPassword,email];          
 
-        try {
-            const result = await pool.query(sql, values);
-                        
-            if (result.rows.length > 0) return true;            
+        const sqlvalidator = "select * from users where email=$1"
+        const valuesValidator = [email]
     
-            return false;
+        try {
+            
+            const resultValidator = await pool.query(sqlvalidator,valuesValidator)
+            
+            if(resultValidator.rows.length > 0){                
+                return {status:false,message:"Correo ya registrado"}
+            }else{
+                const sql = "INSERT INTO users (id,name,password,email) VALUES ($1, $2, $3, $4) RETURNING *";            
+                const newPassword = await this.hashPassword(password)
+                const values = [id,name,newPassword,email];          
+            
+                try {
+                    const result = await pool.query(sql, values);                                
+                    if (result.rows.length > 0) return true;            
+            
+                    return {status:false,message:"error al registrarse"}
+
+                } catch (error) {
+                    throw error;
+                }    
+                    
+            }            
         } catch (error) {
-            throw error;
-        }        
+            console.log(error)
+        }
+               
     }   
 
     static async login(email,password){
@@ -48,7 +64,7 @@ export class UserModel{
         }
             
         } catch (error) {
-            // console.log(error)
+            console.log(error)
         }
 
     }
