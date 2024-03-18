@@ -5,6 +5,7 @@ export const userRouter = Router()
 
 userRouter.post('/', userController.createUser)
 userRouter.post('/login', userController.login)
+userRouter.patch('/changepassword',authenticate(), userController.changepassword)
 
 
 // userRouter.post('/revisar', authenticate(), (req,res) =>{

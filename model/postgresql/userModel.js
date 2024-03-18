@@ -53,7 +53,7 @@ export class UserModel{
 
                 const userInfo = {
                     "id":user.id,
-                    "username":user.name,                                        
+                    "username":user.name,                           
                 }                
                 
                 if(checkPassword) return userInfo
@@ -69,6 +69,59 @@ export class UserModel{
 
     }
 
+
+    static async changepassword(pass,newpass,id){
+        const status={
+            status:true,
+            message:"completado"
+        }
+
+        const sql = "select * from users where id =$1"
+        const values = [id]
+
+
+        try {
+            const result = await pool.query(sql,values)
+
+            if(result.rows.length > 0){
+
+                const user = result.rows[0]     
+                const checkPassword = await this.comparePassword(pass,user.password)                           
+                const newPassword = await this.hashPassword(newpass)
+
+
+                if(checkPassword){   
+                                        
+                    const sqlchange = "UPDATE users set password=$1 where id = $2 RETURNING *"
+                    const valueschange = [newPassword,id]
+
+                    try {
+                        const resultchange = await pool.query(sqlchange,valueschange)
+
+                        if(resultchange.rows.length > 0){
+                            return status
+                        }else{
+                            status.status=false
+                            status.message="error, intente mas tarde"
+                            return status
+                        }
+
+                    } catch (error) {    
+                        console.log(error)                    
+                    }
+
+                    
+                }else{
+                    status.status=false
+                    status.message="la contraseña no es la misma"
+                    return status
+                }
+            }
+        
+        } catch (error) {
+            
+        }        
+    }
 
     static async hashPassword(password) {
         const hash = await  bcrypt.hash(password,10)

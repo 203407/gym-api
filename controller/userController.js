@@ -32,7 +32,7 @@ export class UserController{
         const check = await this.userModel.login(email,password)
 
         if(typeof check === 'object' ){
-            
+           
             const token = generateToken(check)
 
             const userInfo = {  
@@ -42,6 +42,19 @@ export class UserController{
         }else{            
             res.status(400).json(check)
         }        
+    }
+    changepassword = async (req,res)=>{
+        
+        const {pass,newpass} = req.body
+        const id = req.user.id               
+        const status = await this.userModel.changepassword(pass,newpass,id)                
+
+        if(status.status){
+            res.status(200).json("Contraseña actualizada correctamente")
+        }else{
+            res.status(400).json(status.message)
+        }
+        
     }
 
 }

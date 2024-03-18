@@ -8,6 +8,7 @@ const config = {
     user: process.env.USERDB,
     database: process.env.DATABASEDB,
     password: process.env.PASSWORDDB,
+    ssl:{}
   };
   
 

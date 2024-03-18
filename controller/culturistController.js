@@ -18,7 +18,7 @@ export class CulturistController{
         if(status == true){
             res.status(200).json("creado")
         }else{
-            res.json("error al crear")
+            res.status(400).json("error al crear")
         }        
     }
 
