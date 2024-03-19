@@ -3,9 +3,7 @@ import {  ref, uploadBytes  } from "firebase/storage";
 
 import { getDownloadURL } from "firebase/storage";
 
-import {  storage} from '../config/firebaseconfig.js';
-
-    
+import {  storage} from '../config/firebaseconfig.js';    
 
 export const uploadImage = async (file) =>{
 
