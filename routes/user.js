@@ -8,8 +8,3 @@ userRouter.post('/login', userController.login)
 userRouter.patch('/changepassword',authenticate(), userController.changepassword)
 
 
-// userRouter.post('/revisar', authenticate(), (req,res) =>{
-//     console.log(req.user.id) 
-//     res.json(req.user)
-// })
-

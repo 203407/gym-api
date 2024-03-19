@@ -33,7 +33,5 @@ export class CulturistController{
         res.json(culturists)
 
     }
-
-    // deleteByCulturisId = async (req,res) =>{
-    // }
+    
 }

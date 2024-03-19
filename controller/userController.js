@@ -18,13 +18,6 @@ export class UserController{
             res.status(200).json("creado correctamente")
         }       
 
-        
-        
-        // if (status) res.status(200).json(status) 
-
-
-        
-        // res.status(400).json("Problemas al crear el usuario")
     }
 
     login = async (req,res) => {
