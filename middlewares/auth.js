@@ -7,16 +7,21 @@ export const authenticate = () => (req, res, next) => {
     if (token) {
         token = token.split(' ')        
         
-        const decoded = verifyToken(token[1]);
-                
-        if (decoded) {
-            req.user = { ...decoded };
+        if(token[1] == 'invitado'){            
             next();
-        } else {
-            res.status(401).json({
-                message: 'No autorizado'
-            })
+        }else{
+            const decoded = verifyToken(token[1]);
+                
+            if (decoded) {
+                req.user = { ...decoded };                
+                next();
+            } else {
+                res.status(401).json({
+                    message: 'No autorizado'
+                })
+            }
         }
+        
     } else {
         res.status(401).json({
             message: 'No autorizado'
